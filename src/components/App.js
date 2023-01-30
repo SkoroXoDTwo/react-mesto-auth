@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { Routes, Route } from "react-router-dom";
+
 import api from "../utils/Api";
 import Header from "./Header";
 import Main from "./Main";
@@ -10,6 +12,8 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import avatarLoaderGif from "../images/avatar-loader.gif";
+import Login from "./Login";
+import Register from "./Register";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({
@@ -175,15 +179,24 @@ function App() {
       <div className="App">
         <div className="page">
           <Header />
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            handleCardLike={handleCardLike}
-            handleCardDelete={handleCardDelete}
-            cards={cards}
-          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Main
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  handleCardLike={handleCardLike}
+                  handleCardDelete={handleCardDelete}
+                  cards={cards}
+                />
+              }
+            />
+            <Route path="/sign-up" element={<Login />} />
+            <Route path="/sign-in" element={<Register />} />
+          </Routes>
           <Footer />
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
