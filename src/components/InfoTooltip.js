@@ -18,7 +18,10 @@ function InfoTooltip({ isOpen, onClose, isError }) {
           }`}
         />
         <h2 className="popup__title popup__title_type_info-tool">
-          Вы успешно зарегистрировались!
+          {isError
+            ? "Что-то пошло не так! Попробуйте ещё раз."
+            : "Вы успешно зарегистрировались! "
+          }
         </h2>
       </div>
     </div>

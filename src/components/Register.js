@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Register({ handleRegister }) {
+  const navigate = useNavigate();
+
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -17,7 +20,6 @@ function Register({ handleRegister }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formValue);
     handleRegister(formValue.password, formValue.email);
   };
 
@@ -43,7 +45,7 @@ function Register({ handleRegister }) {
             />
             <button className="auth__btn-submit">Зарегистрироваться</button>
           </form>
-          <button className="auth__btn-footer">
+          <button className="auth__btn-footer" onClick={() => navigate("/sign-in")}>
             Уже зарегистрированы? Войти
           </button>
         </div>

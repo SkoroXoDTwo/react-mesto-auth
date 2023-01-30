@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
 import api from "../utils/Api";
@@ -20,6 +20,7 @@ import Login from "./Login";
 import Register from "./Register";
 
 function App() {
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState({
     name: "Загрузка...",
     about: "Загрузка...",
@@ -31,6 +32,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isErrorAuth, setIsErrorAuth] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
@@ -43,6 +45,16 @@ function App() {
     selectedCard;
 
   useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+
+    if(jwt) {
+      apiAuth.checkToken(jwt).then((res) => {
+        setIsLoggedIn(true);
+      }).catch((e) => {
+        setIsLoggedIn(false);
+        console.log(e)
+      });
+    }
     api
       .getInitialUserInfo()
       .then((result) => {
@@ -98,6 +110,7 @@ function App() {
       .postRegister(password, email)
       .then((res) => {
         setIsErrorAuth(false);
+        navigate('/sign-in');
       })
       .catch((e) => {
         setIsErrorAuth(true);
@@ -106,6 +119,16 @@ function App() {
         setIsInfoTooltipOpen(true);
       });
   };
+
+  const handleLogin = (password, email) => {
+    apiAuth.postLogin(password, email).then((data) => {
+      console.log(data)
+      if (data.token){
+        localStorage.setItem('jwt', data.token);
+        navigate('/');
+      }
+    })
+  }
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -207,7 +230,7 @@ function App() {
               element={
                 <ProtectedRoute
                   Component={Main}
-                  isLoggedIn={true}
+                  isLoggedIn={isLoggedIn}
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
                   onEditAvatar={handleEditAvatarClick}
@@ -220,7 +243,7 @@ function App() {
             />
             <Route
               path="/sign-in"
-              element={<Login handleLogin={handleRegister} />}
+              element={<Login handleLogin={handleLogin} isLoggedIn={isLoggedIn}/>}
             />
             <Route
               path="/sign-up"
