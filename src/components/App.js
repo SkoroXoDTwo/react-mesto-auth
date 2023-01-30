@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 import api from "../utils/Api";
+import apiAuth from "../utils/AuthApi";
+
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -12,6 +15,7 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import avatarLoaderGif from "../images/avatar-loader.gif";
+import InfoTooltip from "./InfoTooltip";
 import Login from "./Login";
 import Register from "./Register";
 
@@ -25,6 +29,8 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [isErrorAuth, setIsErrorAuth] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
@@ -33,6 +39,7 @@ function App() {
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
+    isInfoTooltipOpen ||
     selectedCard;
 
   useEffect(() => {
@@ -86,10 +93,25 @@ function App() {
     setSelectedCard(card);
   };
 
+  const handleRegister = (password, email) => {
+    apiAuth
+      .postRegister(password, email)
+      .then((res) => {
+        setIsErrorAuth(false);
+      })
+      .catch((e) => {
+        setIsErrorAuth(true);
+      })
+      .finally(() => {
+        setIsInfoTooltipOpen(true);
+      });
+  };
+
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard(null);
   };
 
@@ -183,7 +205,9 @@ function App() {
             <Route
               path="/"
               element={
-                <Main
+                <ProtectedRoute
+                  Component={Main}
+                  isLoggedIn={true}
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
                   onEditAvatar={handleEditAvatarClick}
@@ -194,8 +218,14 @@ function App() {
                 />
               }
             />
-            <Route path="/sign-up" element={<Login />} />
-            <Route path="/sign-in" element={<Register />} />
+            <Route
+              path="/sign-in"
+              element={<Login handleLogin={handleRegister} />}
+            />
+            <Route
+              path="/sign-up"
+              element={<Register handleRegister={handleRegister} />}
+            />
           </Routes>
           <Footer />
           <EditProfilePopup
@@ -218,6 +248,11 @@ function App() {
           />
           <PopupWithForm name="delete_item" title="Вы уверены?" btnName="Да" />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            onClose={closeAllPopups}
+            isError={isErrorAuth}
+          />
         </div>
       </div>
     </CurrentUserContext.Provider>

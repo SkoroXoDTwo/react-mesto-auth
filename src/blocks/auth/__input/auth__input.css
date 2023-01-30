@@ -19,3 +19,7 @@
   line-height: 17px;
   color: #cccccc;
 }
+
+.auth__input:last-child {
+  margin: 0;
+}
