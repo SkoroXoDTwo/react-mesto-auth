@@ -127,9 +127,12 @@ function App() {
     apiAuth.postLogin(password, email).then((data) => {
       console.log(data);
       if (data.token) {
+        setIsLoggedIn(true);
         localStorage.setItem("jwt", data.token);
         navigate("/");
       }
+    }).catch((e) => {
+      console.log(e);
     });
   };
 
