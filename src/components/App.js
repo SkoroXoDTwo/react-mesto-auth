@@ -21,6 +21,7 @@ import Register from "./Register";
 
 function App() {
   const navigate = useNavigate();
+
   const [currentUser, setCurrentUser] = useState({
     name: "Загрузка...",
     about: "Загрузка...",
@@ -36,6 +37,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
+  const [loginUser, setLoginUser] = useState("");
 
   const isOpenPopup =
     isEditAvatarPopupOpen ||
@@ -51,6 +53,7 @@ function App() {
       apiAuth
         .checkToken(jwt)
         .then((res) => {
+          setLoginUser(res.data.email);
           setIsLoggedIn(true);
         })
         .catch((e) => {
@@ -124,16 +127,24 @@ function App() {
   };
 
   const handleLogin = (password, email) => {
-    apiAuth.postLogin(password, email).then((data) => {
-      console.log(data);
-      if (data.token) {
-        setIsLoggedIn(true);
-        localStorage.setItem("jwt", data.token);
-        navigate("/");
-      }
-    }).catch((e) => {
-      console.log(e);
-    });
+    apiAuth
+      .postLogin(password, email)
+      .then((data) => {
+        if (data.token) {
+          setIsLoggedIn(true);
+          localStorage.setItem("jwt", data.token);
+          navigate("/");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    navigate("/sign-in");
   };
 
   const closeAllPopups = () => {
@@ -229,7 +240,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Header />
+          <Header signOut={handleSignOut} loginUser={loginUser} />
           <Routes>
             <Route
               path="/"

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function Header() {
+function Header({ signOut, loginUser }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const location = useLocation().pathname;
@@ -15,13 +15,13 @@ function Header() {
       <div className="header__container">
         <div className="header__logo"></div>
         {location === "/sign-in" && (
-          <Link to="/sign-up">
-            <button className="header__auth-btn">Регистрация</button>
+          <Link to="/sign-up" className="header__auth-btn">
+            Регистрация
           </Link>
         )}
         {location === "/sign-up" && (
-          <Link to="/sign-in">
-            <button className="header__auth-btn">Войти</button>
+          <Link to="/sign-in" className="header__auth-btn">
+            Войти
           </Link>
         )}
 
@@ -32,8 +32,10 @@ function Header() {
                 isOpenMenu ? "header__menu_open" : null
               }`}
             >
-              <p className="header__email">8888888@mail.ru</p>
-              <button className="header__exit-btn">Выйти</button>
+              <p className="header__email">{loginUser}</p>
+              <button className="header__exit-btn" onClick={signOut}>
+                Выйти
+              </button>
             </nav>
             <button
               className={`header__burger-btn ${
