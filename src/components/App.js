@@ -47,13 +47,16 @@ function App() {
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
 
-    if(jwt) {
-      apiAuth.checkToken(jwt).then((res) => {
-        setIsLoggedIn(true);
-      }).catch((e) => {
-        setIsLoggedIn(false);
-        console.log(e)
-      });
+    if (jwt) {
+      apiAuth
+        .checkToken(jwt)
+        .then((res) => {
+          setIsLoggedIn(true);
+        })
+        .catch((e) => {
+          setIsLoggedIn(false);
+          console.log(e);
+        });
     }
     api
       .getInitialUserInfo()
@@ -110,7 +113,7 @@ function App() {
       .postRegister(password, email)
       .then((res) => {
         setIsErrorAuth(false);
-        navigate('/sign-in');
+        navigate("/sign-in");
       })
       .catch((e) => {
         setIsErrorAuth(true);
@@ -122,13 +125,13 @@ function App() {
 
   const handleLogin = (password, email) => {
     apiAuth.postLogin(password, email).then((data) => {
-      console.log(data)
-      if (data.token){
-        localStorage.setItem('jwt', data.token);
-        navigate('/');
+      console.log(data);
+      if (data.token) {
+        localStorage.setItem("jwt", data.token);
+        navigate("/");
       }
-    })
-  }
+    });
+  };
 
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -243,7 +246,9 @@ function App() {
             />
             <Route
               path="/sign-in"
-              element={<Login handleLogin={handleLogin} isLoggedIn={isLoggedIn}/>}
+              element={
+                <Login handleLogin={handleLogin} isLoggedIn={isLoggedIn} />
+              }
             />
             <Route
               path="/sign-up"
