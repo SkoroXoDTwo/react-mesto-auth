@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function Header({ signOut, loginUser }) {
+function Header({ onSignOut, loginUser }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const location = useLocation().pathname;
@@ -33,7 +33,7 @@ function Header({ signOut, loginUser }) {
               }`}
             >
               <p className="header__email">{loginUser}</p>
-              <button className="header__exit-btn" onClick={signOut}>
+              <button className="header__exit-btn" onClick={onSignOut}>
                 Выйти
               </button>
             </nav>

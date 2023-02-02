@@ -92,9 +92,9 @@ function App() {
           setLoginUser(res.data.email);
           setIsLoggedIn(true);
         })
-        .catch((e) => {
+        .catch((err) => {
+          console.log(err);
           setIsLoggedIn(false);
-          console.log(e);
         });
     }
   }, [isLoggedIn]);
@@ -122,7 +122,8 @@ function App() {
         setIsErrorAuth(false);
         navigate("/sign-in");
       })
-      .catch((e) => {
+      .catch((err) => {
+        console.log(err);
         setIsErrorAuth(true);
       })
       .finally(() => {
@@ -140,8 +141,10 @@ function App() {
           navigate("/");
         }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.log(err);
+        setIsErrorAuth(true);
+        setIsInfoTooltipOpen(true);
       });
   };
 
@@ -244,7 +247,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
-          <Header signOut={handleSignOut} loginUser={loginUser} />
+          <Header onSignOut={handleSignOut} loginUser={loginUser} />
           <Routes>
             <Route
               path="/"

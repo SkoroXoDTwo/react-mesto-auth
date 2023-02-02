@@ -18,7 +18,7 @@ function Register({ handleRegister }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const onRegister = (e) => {
     e.preventDefault();
     handleRegister(formValue.password, formValue.email);
   };
@@ -28,7 +28,7 @@ function Register({ handleRegister }) {
       <section className="auth">
         <div className="auth__container">
           <h2 className="auth__title">Регистрация</h2>
-          <form className="auth__form" onSubmit={handleSubmit}>
+          <form className="auth__form" onSubmit={onRegister}>
             <input
               className="auth__input"
               name="email"

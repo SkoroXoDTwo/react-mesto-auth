@@ -15,7 +15,7 @@ function Login({ handleLogin, isLoggedIn }) {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const onLogin = (e) => {
     e.preventDefault();
     handleLogin(formValue.password, formValue.email);
   };
@@ -34,7 +34,7 @@ function Login({ handleLogin, isLoggedIn }) {
       <section className="auth">
         <div className="auth__container">
           <h2 className="auth__title">Вход</h2>
-          <form className="auth__form" onSubmit={handleSubmit}>
+          <form className="auth__form" onSubmit={onLogin}>
             <input
               className="auth__input"
               name="email"
