@@ -5,11 +5,10 @@ function Login({ handleLogin, isLoggedIn }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-
-    if(isLoggedIn) {
+    if (isLoggedIn) {
       navigate("/");
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
 
   const [formValue, setFormValue] = useState({
     email: "",
@@ -42,6 +41,8 @@ function Login({ handleLogin, isLoggedIn }) {
               value={formValue.email}
               placeholder="Email"
               onChange={handleChange}
+              type="email"
+              required
             />
             <input
               className="auth__input"
@@ -49,6 +50,8 @@ function Login({ handleLogin, isLoggedIn }) {
               value={formValue.password}
               placeholder="Пароль"
               onChange={handleChange}
+              type="password"
+              required
             />
             <button className="auth__btn-submit">Войти</button>
           </form>

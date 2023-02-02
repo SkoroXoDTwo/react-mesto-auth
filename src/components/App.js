@@ -47,20 +47,6 @@ function App() {
     selectedCard;
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-
-    if (jwt) {
-      apiAuth
-        .checkToken(jwt)
-        .then((res) => {
-          setLoginUser(res.data.email);
-          setIsLoggedIn(true);
-        })
-        .catch((e) => {
-          setIsLoggedIn(false);
-          console.log(e);
-        });
-    }
     api
       .getInitialUserInfo()
       .then((result) => {
@@ -95,6 +81,24 @@ function App() {
     }
   }, [isOpenPopup]);
 
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt) {
+      apiAuth
+        .checkToken(jwt)
+        .then((res) => {
+          console.log("auth");
+          setLoginUser(res.data.email);
+          setIsLoggedIn(true);
+        })
+        .catch((e) => {
+          setIsLoggedIn(false);
+          console.log(e);
+        });
+    }
+  }, [isLoggedIn]);
+
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   };
@@ -114,7 +118,7 @@ function App() {
   const handleRegister = (password, email) => {
     apiAuth
       .postRegister(password, email)
-      .then((res) => {
+      .then((_) => {
         setIsErrorAuth(false);
         navigate("/sign-in");
       })

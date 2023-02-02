@@ -5,10 +5,11 @@
   background: none;
   width: 24px;
   border-top: 3px solid #fff;
-  height: 15px;
+  height: 21px;
   position: relative;
   display: none;
   z-index: 3;
+  justify-self: end;
 }
 
 .header__burger-btn:hover {

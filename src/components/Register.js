@@ -35,6 +35,8 @@ function Register({ handleRegister }) {
               value={formValue.email}
               placeholder="Email"
               onChange={handleChange}
+              type="email"
+              required
             />
             <input
               className="auth__input"
@@ -42,6 +44,8 @@ function Register({ handleRegister }) {
               value={formValue.password}
               placeholder="Пароль"
               onChange={handleChange}
+              type="password"
+              required
             />
             <button className="auth__btn-submit">Зарегистрироваться</button>
           </form>
