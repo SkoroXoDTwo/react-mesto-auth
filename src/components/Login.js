@@ -50,6 +50,7 @@ function Login({ handleLogin, isLoggedIn }) {
               value={formValue.password}
               placeholder="Пароль"
               onChange={handleChange}
+              minLength={6}
               type="password"
               required
             />

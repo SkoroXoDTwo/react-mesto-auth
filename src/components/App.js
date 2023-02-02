@@ -88,7 +88,6 @@ function App() {
       apiAuth
         .checkToken(jwt)
         .then((res) => {
-          console.log("auth");
           setLoginUser(res.data.email);
           setIsLoggedIn(true);
         })

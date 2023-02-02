@@ -44,12 +44,16 @@ function Register({ handleRegister }) {
               value={formValue.password}
               placeholder="Пароль"
               onChange={handleChange}
+              minLength={6}
               type="password"
               required
             />
             <button className="auth__btn-submit">Зарегистрироваться</button>
           </form>
-          <button className="auth__btn-footer" onClick={() => navigate("/sign-in")}>
+          <button
+            className="auth__btn-footer"
+            onClick={() => navigate("/sign-in")}
+          >
             Уже зарегистрированы? Войти
           </button>
         </div>
