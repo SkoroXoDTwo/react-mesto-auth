@@ -47,6 +47,8 @@ function App() {
     selectedCard;
 
   useEffect(() => {
+    checkToken();
+
     api
       .getInitialUserInfo()
       .then((result) => {
@@ -81,7 +83,7 @@ function App() {
     }
   }, [isOpenPopup]);
 
-  useEffect(() => {
+  const checkToken = () => {
     const jwt = localStorage.getItem("jwt");
 
     if (jwt) {
@@ -96,7 +98,7 @@ function App() {
           setIsLoggedIn(false);
         });
     }
-  }, [isLoggedIn]);
+  };
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -137,6 +139,7 @@ function App() {
         if (data.token) {
           setIsLoggedIn(true);
           localStorage.setItem("jwt", data.token);
+          checkToken();
           navigate("/");
         }
       })
