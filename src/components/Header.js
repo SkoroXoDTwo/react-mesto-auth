@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 
 function Header({ onSignOut, loginUser }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-
-  const location = useLocation().pathname;
 
   const openMenu = () => {
     setIsOpenMenu(!isOpenMenu);
@@ -14,37 +12,47 @@ function Header({ onSignOut, loginUser }) {
     <header className="header">
       <div className="header__container">
         <div className="header__logo"></div>
-        {location === "/sign-in" && (
-          <Link to="/sign-up" className="header__auth-btn">
-            Регистрация
-          </Link>
-        )}
-        {location === "/sign-up" && (
-          <Link to="/sign-in" className="header__auth-btn">
-            Войти
-          </Link>
-        )}
-
-        {location === "/" && (
-          <>
-            <nav
-              className={`header__menu ${
-                isOpenMenu ? "header__menu_open" : null
-              }`}
-            >
-              <p className="header__email">{loginUser}</p>
-              <button className="header__exit-btn" onClick={onSignOut}>
-                Выйти
-              </button>
-            </nav>
-            <button
-              className={`header__burger-btn ${
-                isOpenMenu ? " header__burger-btn_open" : null
-              }`}
-              onClick={openMenu}
-            />
-          </>
-        )}
+        <Routes>
+          <Route
+            path="/sign-in"
+            element={
+              <Link to="/sign-up" className="header__auth-btn">
+                Регистрация
+              </Link>
+            }
+          />
+          <Route
+            path="/sign-up"
+            element={
+              <Link to="/sign-in" className="header__auth-btn">
+                Войти
+              </Link>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                <nav
+                  className={`header__menu ${
+                    isOpenMenu ? "header__menu_open" : null
+                  }`}
+                >
+                  <p className="header__email">{loginUser}</p>
+                  <button className="header__exit-btn" onClick={onSignOut}>
+                    Выйти
+                  </button>
+                </nav>
+                <button
+                  className={`header__burger-btn ${
+                    isOpenMenu ? " header__burger-btn_open" : null
+                  }`}
+                  onClick={openMenu}
+                />
+              </>
+            }
+          />
+        </Routes>
       </div>
     </header>
   );
